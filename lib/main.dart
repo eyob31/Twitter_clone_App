@@ -11,7 +11,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-        home: MyHomePage(), debugShowCheckedModeBanner: false,);
+      home: MyHomePage(),
+      debugShowCheckedModeBanner: false,
+    );
   }
 }
 
@@ -36,11 +38,11 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            const SizedBox(height: 20.0),
             const Image(
               width: 100,
               image: AssetImage('assets/twitter_logo.png'),
             ),
-            const SizedBox(height: 20.0),
             const Text(
               "Log in to Twitter",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
