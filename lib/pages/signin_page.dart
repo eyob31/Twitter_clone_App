@@ -1,14 +1,16 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:twitter_clone/pages/signup_page.dart';
 
-class SignupPage extends StatefulWidget {
-  const SignupPage({super.key});
+class SigninPage extends StatefulWidget {
+  const SigninPage({super.key});
 
   @override
-  State<SignupPage> createState() => _MyHomePageState();
+  State<SigninPage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<SignupPage> {
+class _MyHomePageState extends State<SigninPage> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   final GlobalKey<FormState> _signInKey = GlobalKey();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -22,11 +24,13 @@ class _MyHomePageState extends State<SignupPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const FaIcon(FontAwesomeIcons.twitter,
-                color: Colors.blue, size: 90.0),
             const SizedBox(height: 20.0),
+            const Image(
+              width: 100,
+              image: AssetImage('assets/twitter_logo.png'),
+            ),
             const Text(
-              "Sign up to Twitter",
+              "Log in to Twitter",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             Container(
@@ -83,13 +87,24 @@ class _MyHomePageState extends State<SignupPage> {
                 borderRadius: BorderRadius.circular(30),
               ),
               child: TextButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (_signInKey.currentState!.validate()) {
-                      debugPrint(_emailController.text);
-                      debugPrint(_passwordController.text);
+                      try {
+                        await _auth.signInWithEmailAndPassword(
+                            email: _emailController.text,
+                            password: _passwordController.text);
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              e.toString(),
+                            ),
+                          ),
+                        );
+                      }
                     }
                   },
-                  child: const Text("Sign Up",
+                  child: const Text("Log In",
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 18,
@@ -97,9 +112,11 @@ class _MyHomePageState extends State<SignupPage> {
             ),
             TextButton(
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const SignupPage(),
+                  ));
                 },
-                child: const Text("Already have an account? Log in",
+                child: const Text("Dont have an account? Sign up here",
                     style: TextStyle(color: Colors.blue)))
           ],
         ),

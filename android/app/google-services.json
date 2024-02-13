@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "667684537520",
+    "project_id": "eyob-twitter-clone",
+    "storage_bucket": "eyob-twitter-clone.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:667684537520:android:6c28e400a6800644232775",
+        "android_client_info": {
+          "package_name": "com.example.twitter_clone"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7tJIinVEuR2PMGi1s97G7SpWzaClHaRQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
