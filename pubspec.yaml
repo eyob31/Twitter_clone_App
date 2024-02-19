@@ -39,6 +39,8 @@ dependencies:
   flutter_riverpod: ^2.4.9
   firebase_core: ^2.24.2
   firebase_auth: ^4.17.4
+  cloud_firestore: ^4.15.4
+  riverpod: ^2.5.0
 
 dev_dependencies:
   flutter_test:

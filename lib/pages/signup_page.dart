@@ -1,15 +1,18 @@
+// ignore_for_file: use_build_context_synchronously
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:twitter_clone/providers/user_provider.dart';
 
-class SignupPage extends StatefulWidget {
+class SignupPage extends ConsumerStatefulWidget {
   const SignupPage({super.key});
 
   @override
-  State<SignupPage> createState() => _MyHomePageState();
+  ConsumerState<SignupPage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<SignupPage> {
+class _MyHomePageState extends ConsumerState<SignupPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GlobalKey<FormState> _signInKey = GlobalKey();
   final TextEditingController _emailController = TextEditingController();
@@ -87,9 +90,23 @@ class _MyHomePageState extends State<SignupPage> {
               child: TextButton(
                   onPressed: () async {
                     if (_signInKey.currentState!.validate()) {
-                      await _auth.signInWithEmailAndPassword(
+                      try {
+                        await _auth.createUserWithEmailAndPassword(
                           email: _emailController.text,
-                          password: _passwordController.text);
+                          password: _passwordController.text,
+                        );
+                        await ref
+                            .read(userProvider.notifier)
+                            .signup(_emailController.text);
+                        if (!mounted) return;
+                        Navigator.pop(context);
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(e.toString()),
+                          ),
+                        );
+                      }
                     }
                   },
                   child: const Text("Sign Up",
