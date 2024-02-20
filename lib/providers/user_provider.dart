@@ -1,5 +1,8 @@
 // ignore_for_file: avoid_print
 
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -58,8 +61,9 @@ class UserNotifier extends StateNotifier<LocalUser> {
             response.docs[0].data() as Map<String, dynamic>));
   }
 
-  //  SignUP Function
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseStorage _storage = FirebaseStorage.instance;
+  //  SignUP Function
   Future<void> signup(String userEmail) async {
     DocumentReference response = await _firestore.collection("Users").add(
         FirebaseUser(
@@ -71,6 +75,28 @@ class UserNotifier extends StateNotifier<LocalUser> {
     state = LocalUser(
         id: response.id,
         user: FirebaseUser.fromMap(snapshot.data() as Map<String, dynamic>));
+  }
+
+  // Update Username Function
+  Future<void> updateUserName(String newUserName) async {
+    await _firestore
+        .collection("Users")
+        .doc(state.id)
+        .update({'name': newUserName});
+    state = state.copyWith(user: state.user.copyWith(name: newUserName));
+  }
+
+  // Update Profile Picture
+  Future<void> updatePhoto(File image) async {
+    Reference ref = _storage.ref().child("Users").child(state.id);
+    TaskSnapshot snapshot = await ref.putFile(image);
+    String profilePicURL = await snapshot.ref.getDownloadURL();
+    await _firestore
+        .collection("Users")
+        .doc(state.id)
+        .update({'profilePic': profilePicURL});
+    state =
+        state.copyWith(user: state.user.copyWith(profilePic: profilePicURL));
   }
 
 //  Signout Function
