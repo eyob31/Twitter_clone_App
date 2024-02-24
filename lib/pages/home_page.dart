@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:twitter_clone/pages/create_tweet.dart';
 import 'package:twitter_clone/pages/settings_page.dart';
 
 import '../providers/user_provider.dart';
@@ -64,6 +65,12 @@ class HomePage extends ConsumerWidget {
                 })
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => const CreateTweet()));
+        },
       ),
     );
   }
