@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:twitter_clone/models/tweets.dart';
 import 'package:twitter_clone/pages/create_tweet.dart';
 import 'package:twitter_clone/pages/settings_page.dart';
+import 'package:twitter_clone/providers/tweet_provider.dart';
 
 import '../providers/user_provider.dart';
 
@@ -28,12 +30,32 @@ class HomePage extends ConsumerWidget {
         title: const Text("Home Page"),
         centerTitle: true,
       ),
-      body: Column(
-        children: [
-          Text(ref.watch(userProvider).user.email),
-          Text(ref.watch(userProvider).user.name),
-        ],
-      ),
+      body: ref.watch(feedProvider).when(
+          data: (List<Tweet> tweets) {
+            return ListView.builder(
+              itemCount: tweets.length,
+              itemBuilder: (context, count) {
+                return ListTile(
+                  leading: CircleAvatar(
+                    radius: 25,
+                    foregroundImage: NetworkImage(
+                      tweets[count].profilePic,
+                    ),
+                  ),
+                  title: Text(
+                    tweets[count].name,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  subtitle: Text(tweets[count].tweet,
+                      style: const TextStyle(fontSize: 16)),
+                );
+              },
+            );
+          },
+          error: ((error, stackTrace) => const Text("Error")),
+          loading: () {
+            return const CircularProgressIndicator();
+          }),
       drawer: Drawer(
         child: Column(
           children: [
@@ -71,6 +93,9 @@ class HomePage extends ConsumerWidget {
           Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => const CreateTweet()));
         },
+        child: const Icon(
+          Icons.add,
+        ),
       ),
     );
   }

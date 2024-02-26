@@ -24,6 +24,7 @@ class CreateTweet extends ConsumerWidget {
                 maxLength: 280,
                 maxLines: 4,
                 decoration: const InputDecoration(
+                  labelText: "What's on your mind...",
                   border: OutlineInputBorder(),
                 ),
               ),

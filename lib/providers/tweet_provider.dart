@@ -3,6 +3,24 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:twitter_clone/models/tweets.dart';
 import 'package:twitter_clone/providers/user_provider.dart';
 
+final feedProvider = StreamProvider.autoDispose<List<Tweet>>((ref) {
+  return FirebaseFirestore.instance
+      .collection("Tweets")
+      .orderBy(
+        "postTime",
+        descending: true,
+      )
+      .snapshots()
+      .map((event) {
+    List<Tweet> tweets = [];
+
+    for (int i = 0; i < event.docs.length; i++) {
+      tweets.add(Tweet.fromMap(event.docs[i].data()));
+    }
+    return tweets;
+  });
+});
+
 final tweetProvider = Provider<TweetApi>((ref) {
   return TweetApi(ref);
 });
