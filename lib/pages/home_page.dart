@@ -15,6 +15,13 @@ class HomePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(4.0),
+          child: Container(
+            color: Colors.grey,
+            height: 1,
+          ),
+        ),
         leading: Builder(builder: (context) {
           return GestureDetector(
             onTap: () => Scaffold.of(context).openDrawer(),
@@ -27,12 +34,21 @@ class HomePage extends ConsumerWidget {
             ),
           );
         }),
-        title: const Text("Home Page"),
-        centerTitle: true,
+        title: const Image(
+          image: AssetImage(
+            'assets/twitter_logo.png',
+          ),
+          width: 50,
+        ),
       ),
       body: ref.watch(feedProvider).when(
           data: (List<Tweet> tweets) {
-            return ListView.builder(
+            return ListView.separated(
+              separatorBuilder: (context, index) {
+                return const Divider(
+                  color: Colors.black,
+                );
+              },
               itemCount: tweets.length,
               itemBuilder: (context, count) {
                 return ListTile(

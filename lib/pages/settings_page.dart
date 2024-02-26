@@ -59,7 +59,14 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                 onPressed: () {
                   ref
                       .read(userProvider.notifier)
-                      .updateUserName(_nameController.text);
+                      .updateUserName(_nameController.text)
+                      .whenComplete(
+                        () => ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Name updated Successfully"),
+                          ),
+                        ),
+                      );
                   // Navigator.of(context).pop();
                 },
                 child: const Text("Update Name"))

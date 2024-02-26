@@ -11,7 +11,7 @@ import 'package:twitter_clone/models/users.dart';
 final userProvider = StateNotifierProvider<UserNotifier, LocalUser>((ref) {
   return UserNotifier();
 });
-  
+
 class LocalUser {
   final String id;
   final FirebaseUser user;
